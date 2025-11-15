@@ -1,15 +1,238 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
+ * Voice Command Rails - Default Styles
  *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ * These are minimal, framework-agnostic styles.
+ * You can override any of these in your application's stylesheet.
  *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
+ * To completely disable these styles, remove this stylesheet from your layout.
+ * To customize, add your own CSS that targets the same classes.
  */
+
+/* ============================================
+   Container & Positioning
+   ============================================ */
+
+.voice-command-container {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.voice-command-position-bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.voice-command-position-bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+/* Custom position - define yourself */
+.voice-command-position-custom {
+  /* Add your own positioning */
+}
+
+/* ============================================
+   Response Container
+   ============================================ */
+
+.voice-command-response-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ============================================
+   Microphone Button
+   ============================================ */
+
+.voice-command-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background-color: #1a1a1a;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.voice-command-button:hover {
+  background-color: #333;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.voice-command-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.voice-command-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Recording state animation */
+.voice-command-button[aria-pressed="true"] {
+  background-color: #dc2626;
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.voice-command-button[aria-pressed="true"]:hover {
+  background-color: #b91c1c;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ============================================
+   Icon
+   ============================================ */
+
+.voice-command-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   Status Message
+   ============================================ */
+
+.voice-command-status {
+  font-size: 0.875rem;
+  color: #6b7280;
+  padding: 0.5rem;
+}
+
+/* ============================================
+   Message Cards (Success & Error)
+   ============================================ */
+
+.voice-command-message {
+  max-width: 320px;
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: opacity 0.5s ease;
+}
+
+.voice-command-message-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.voice-command-message-icon-container {
+  flex-shrink: 0;
+}
+
+.voice-command-message-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.voice-command-message-icon-success {
+  color: #10b981;
+}
+
+.voice-command-message-icon-error {
+  color: #ef4444;
+}
+
+.voice-command-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.voice-command-message-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.voice-command-message-text {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0.25rem 0 0 0;
+}
+
+.voice-command-message-timestamp {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0.25rem 0 0 0;
+}
+
+/* ============================================
+   Dark Mode Support (Optional)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .voice-command-button {
+    background-color: #374151;
+  }
+
+  .voice-command-button:hover {
+    background-color: #4b5563;
+  }
+
+  .voice-command-message {
+    background-color: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .voice-command-message-title {
+    color: #f9fafb;
+  }
+
+  .voice-command-message-text {
+    color: #d1d5db;
+  }
+
+  .voice-command-message-timestamp {
+    color: #6b7280;
+  }
+
+  .voice-command-status {
+    color: #9ca3af;
+  }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.voice-command-hidden {
+  display: none !important;
+}
+
+.voice-command-fade-out {
+  opacity: 0;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+
+@media (max-width: 640px) {
+  .voice-command-message {
+    max-width: calc(100vw - 6rem);
+  }
+}

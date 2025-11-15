@@ -1,0 +1,94 @@
+<%# Voice Command Audio Button %>
+<%#
+  Renders a floating microphone button for voice commands
+
+  Usage:
+    <%= render 'voice_command_rails/audio_button' %>
+
+  Configuration:
+    Position can be configured via VoiceCommandRails.configuration.button_position
+    - :bottom_right (default)
+    - :bottom_left
+    - :custom (requires custom CSS)
+
+  Styling:
+    The gem provides minimal default styles. You can customize by:
+    1. Overriding the CSS classes (see app/assets/stylesheets/voice_command_rails/application.css)
+    2. Using your own framework classes by setting button_position: :custom and styling .voice-command-container
+%>
+
+<%
+  button_position = VoiceCommandRails.configuration.button_position
+  position_class = case button_position
+  when :bottom_left
+    "voice-command-container voice-command-position-bottom-left"
+  when :custom
+    "voice-command-container voice-command-position-custom"
+  else # :bottom_right
+    "voice-command-container voice-command-position-bottom-right"
+  end
+
+  # Add custom container class if configured
+  custom_container = VoiceCommandRails.configuration.custom_container_class
+  position_class += " #{custom_container}" if custom_container.present?
+
+  # Custom button class
+  button_class = "voice-command-button"
+  custom_button = VoiceCommandRails.configuration.custom_button_class
+  button_class += " #{custom_button}" if custom_button.present?
+%>
+
+<div class="<%= position_class %>"
+     data-controller="voice-command-rails--audio-recorder"
+     data-voice-command-button>
+
+  <%= form_with url: voice_command_rails.commands_path,
+                method: :post,
+                multipart: true,
+                html: {
+                  data: {
+                    voice_command_rails__audio_recorder_target: "form",
+                    turbo_frame: "voice_command_response"
+                  }
+                } do |form| %>
+
+    <%# Hidden file input - populated by JavaScript %>
+    <%= form.file_field :audio,
+                        accept: "audio/webm,audio/mp4,audio/mpeg,audio/wav,audio/ogg,audio/flac",
+                        data: { voice_command_rails__audio_recorder_target: "input" },
+                        style: "display: none;" %>
+
+    <%# Status message %>
+    <div id="voice_command_status"
+         data-voice-command-rails--audio-recorder-target="status"
+         class="voice-command-status"
+         style="display: none;">
+      Tap to record
+    </div>
+
+    <%# Response container %>
+    <div id="voice_command_response" class="voice-command-response-container"></div>
+
+    <%# Microphone button %>
+    <button type="button"
+            data-action="click->voice-command-rails--audio-recorder#toggle"
+            data-voice-command-rails--audio-recorder-target="button"
+            data-voice-command-microphone
+            class="<%= button_class %>"
+            aria-label="Voice command"
+            aria-pressed="false">
+
+      <%# Microphone SVG Icon %>
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="voice-command-icon"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke-width="1.5"
+           stroke="currentColor">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+      </svg>
+    </button>
+  <% end %>
+</div>

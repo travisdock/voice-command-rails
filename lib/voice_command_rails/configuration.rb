@@ -16,7 +16,10 @@ module VoiceCommandRails
                   :fade_delay,
                   :feature_flag_method,
                   :log_transcriptions,
-                  :log_tool_calls
+                  :log_tool_calls,
+                  :custom_button_class,
+                  :custom_container_class,
+                  :custom_message_class
 
     def initialize
       # AI Configuration
@@ -40,6 +43,11 @@ module VoiceCommandRails
       @button_position = :bottom_right
       @enable_auto_fade = true
       @fade_delay = 5.seconds
+
+      # Custom CSS classes (optional - for framework integration)
+      @custom_button_class = nil
+      @custom_container_class = nil
+      @custom_message_class = nil
 
       # Feature Flags
       @feature_flag_method = :voice_commands_enabled?

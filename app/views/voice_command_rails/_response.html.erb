@@ -1,0 +1,66 @@
+<%# Voice Command Response Message %>
+<%#
+  Displays the AI's response to a voice command
+
+  Usage:
+    <%= render 'voice_command_rails/response', message: "Task created!", timestamp: Time.current %>
+
+  Styling:
+    Use CSS classes:
+    - .voice-command-message (container)
+    - .voice-command-message-success (modifier)
+    - .voice-command-message-icon
+    - .voice-command-message-title
+    - .voice-command-message-text
+    - .voice-command-message-timestamp
+%>
+
+<%
+  enable_auto_fade = VoiceCommandRails.configuration.enable_auto_fade
+  fade_delay = VoiceCommandRails.configuration.fade_delay
+  fade_delay_ms = (fade_delay * 1000).to_i
+
+  # Build message class
+  message_class = "voice-command-message voice-command-message-success"
+  custom_message = VoiceCommandRails.configuration.custom_message_class
+  message_class += " #{custom_message}" if custom_message.present?
+%>
+
+<div class="<%= message_class %>"
+     data-voice-command-message="success"
+     <%= "data-controller='voice-command-rails--auto-fade' data-voice-command-rails--auto-fade-delay-value='#{fade_delay_ms}'" if enable_auto_fade %>>
+
+  <%# Success Icon %>
+  <div class="voice-command-message-layout">
+    <div class="voice-command-message-icon-container">
+      <svg class="voice-command-message-icon voice-command-message-icon-success"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke-width="1.5"
+           stroke="currentColor">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+
+    <div class="voice-command-message-content">
+      <%# Response Title %>
+      <p class="voice-command-message-title">
+        Voice Command
+      </p>
+
+      <%# Response Message %>
+      <p class="voice-command-message-text">
+        <%= sanitize(message, tags: []) %>
+      </p>
+
+      <%# Timestamp %>
+      <% if timestamp %>
+        <p class="voice-command-message-timestamp">
+          <%= time_ago_in_words(timestamp) %> ago
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

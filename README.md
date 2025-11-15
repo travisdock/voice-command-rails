@@ -185,6 +185,200 @@ Set the flag for users who should have access:
 current_user.update!(voice_commands_enabled: true)
 ```
 
+### 4. Styling (Optional)
+
+The gem includes minimal, framework-agnostic CSS that works out of the box. You have several options for styling:
+
+#### Option 1: Use the Default Styles (Easiest)
+
+The gem automatically includes a basic stylesheet. No additional configuration needed!
+
+```ruby
+# config/initializers/voice_command_rails.rb
+VoiceCommandRails.configure do |config|
+  # Use defaults - nothing to configure!
+end
+```
+
+#### Option 2: Add Custom Classes (Recommended for Framework Users)
+
+Inject your framework's utility classes without overriding:
+
+```ruby
+# config/initializers/voice_command_rails.rb
+VoiceCommandRails.configure do |config|
+  config.custom_button_class = "btn btn-primary shadow-lg"  # Bootstrap
+  # or
+  config.custom_button_class = "bg-blue-600 hover:bg-blue-700 text-white"  # Tailwind
+
+  config.custom_container_class = "my-custom-container"
+  config.custom_message_class = "card"
+end
+```
+
+The custom classes are **added to** (not replacing) the base classes, so the gem's functionality still works.
+
+#### Option 3: Override CSS Styles
+
+Override the default styles in your application's stylesheet:
+
+```css
+/* app/assets/stylesheets/application.css */
+
+/* Customize the button - target by class */
+.voice-command-button {
+  background-color: #your-brand-color;
+  width: 64px;
+  height: 64px;
+}
+
+/* Or target by data attribute */
+[data-voice-command-microphone] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 70px;
+  height: 70px;
+}
+
+/* Customize messages */
+.voice-command-message {
+  border-radius: 1rem;
+  box-shadow: your-shadow;
+  background: #f8f9fa;
+}
+
+/* Customize positioning */
+.voice-command-position-bottom-right {
+  bottom: 2rem;
+  right: 2rem;
+}
+
+/* Dark mode override */
+@media (prefers-color-scheme: dark) {
+  .voice-command-button {
+    background-color: #your-dark-brand-color;
+  }
+}
+```
+
+#### Option 4: Use with Tailwind CSS (@apply)
+
+Use Tailwind's `@apply` directive in your CSS:
+
+```css
+/* app/assets/stylesheets/application.css */
+
+.voice-command-button {
+  @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-800;
+  @apply text-white rounded-full;
+  @apply w-16 h-16;
+  @apply shadow-lg hover:shadow-xl;
+  @apply transition-all duration-200;
+  @apply focus:ring-4 focus:ring-blue-300;
+}
+
+.voice-command-message {
+  @apply bg-white dark:bg-gray-800;
+  @apply rounded-lg shadow-md;
+  @apply border border-gray-200 dark:border-gray-700;
+}
+```
+
+#### Option 5: Completely Custom Styling
+
+Disable the gem's stylesheet and write everything from scratch:
+
+1. Remove the gem's stylesheet from your asset pipeline:
+
+```ruby
+# app/assets/config/manifest.js
+// Remove or comment out:
+// link voice_command_rails_application.css
+```
+
+2. Create your own styles targeting the semantic class names:
+
+```css
+/* app/assets/stylesheets/voice_commands.css */
+
+/* Container */
+.voice-command-container {
+  /* Your positioning and layout */
+}
+
+/* Button */
+.voice-command-button {
+  /* Completely custom button styles */
+}
+
+/* Messages */
+.voice-command-message {
+  /* Completely custom message styles */
+}
+
+/* See full list of classes below */
+```
+
+**Available CSS Classes:**
+- `.voice-command-container` - Main container
+- `.voice-command-button` - Microphone button (also has `[data-voice-command-microphone]`)
+- `.voice-command-icon` - SVG icon inside button
+- `.voice-command-status` - Status message
+- `.voice-command-message` - Message card (also has `[data-voice-command-message]`)
+- `.voice-command-message-success` - Success modifier
+- `.voice-command-message-error` - Error modifier
+- `.voice-command-message-title` - Message title
+- `.voice-command-message-text` - Message body
+- `.voice-command-message-timestamp` - Timestamp
+
+**Available Data Attributes (for easier targeting):**
+- `[data-voice-command-button]` - Container element
+- `[data-voice-command-microphone]` - Button element
+- `[data-voice-command-message="success"]` - Success message
+- `[data-voice-command-message="error"]` - Error message
+
+#### Examples of Complete Customizations
+
+**Bootstrap Example:**
+
+```ruby
+# config/initializers/voice_command_rails.rb
+config.custom_button_class = "btn btn-primary btn-lg rounded-circle"
+config.custom_message_class = "alert"
+```
+
+```css
+/* app/assets/stylesheets/application.css */
+.voice-command-message-success {
+  @extend .alert-success;
+}
+
+.voice-command-message-error {
+  @extend .alert-danger;
+}
+```
+
+**Tailwind Example:**
+
+```ruby
+# config/initializers/voice_command_rails.rb
+config.custom_button_class = "bg-indigo-600 hover:bg-indigo-700 ring-2 ring-indigo-400"
+config.custom_container_class = "bottom-20 right-20"
+```
+
+**Material Design Example:**
+
+```css
+.voice-command-button {
+  background: #6200ea;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14);
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.voice-command-button:hover {
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14);
+}
+```
+
 ## How It Works
 
 1. **User clicks the microphone button** - JavaScript starts recording audio

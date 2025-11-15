@@ -1,0 +1,56 @@
+<%# Voice Command Error Message %>
+<%#
+  Displays an error message when voice command processing fails
+
+  Usage:
+    <%= render 'voice_command_rails/error', message: "Audio file too large" %>
+
+  Styling:
+    Use CSS classes:
+    - .voice-command-message (container)
+    - .voice-command-message-error (modifier)
+    - .voice-command-message-icon-error
+%>
+
+<%
+  enable_auto_fade = VoiceCommandRails.configuration.enable_auto_fade
+  fade_delay = VoiceCommandRails.configuration.fade_delay
+  fade_delay_ms = (fade_delay * 1000 * 1.5).to_i # Errors stay a bit longer
+
+  # Build message class
+  message_class = "voice-command-message voice-command-message-error"
+  custom_message = VoiceCommandRails.configuration.custom_message_class
+  message_class += " #{custom_message}" if custom_message.present?
+%>
+
+<div class="<%= message_class %>"
+     data-voice-command-message="error"
+     <%= "data-controller='voice-command-rails--auto-fade' data-voice-command-rails--auto-fade-delay-value='#{fade_delay_ms}'" if enable_auto_fade %>>
+
+  <%# Error Icon %>
+  <div class="voice-command-message-layout">
+    <div class="voice-command-message-icon-container">
+      <svg class="voice-command-message-icon voice-command-message-icon-error"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke-width="1.5"
+           stroke="currentColor">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+    </div>
+
+    <div class="voice-command-message-content">
+      <%# Error Title %>
+      <p class="voice-command-message-title">
+        Error
+      </p>
+
+      <%# Error Message %>
+      <p class="voice-command-message-text">
+        <%= sanitize(message, tags: []) %>
+      </p>
+    </div>
+  </div>
+</div>
