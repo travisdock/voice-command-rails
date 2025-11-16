@@ -19,6 +19,9 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
+  # Ensure generators are included
+  spec.files += Dir["lib/generators/**/*"]
+
   spec.required_ruby_version = ">= 3.0.0"
 
   # Runtime dependencies
@@ -30,6 +33,7 @@ Gem::Specification.new do |spec|
 
   # Development dependencies
   spec.add_development_dependency "rspec-rails", "~> 6.0"
+  spec.add_development_dependency "generator_spec", "~> 0.9"
   spec.add_development_dependency "capybara", "~> 3.0"
   spec.add_development_dependency "selenium-webdriver", "~> 4.0"
   spec.add_development_dependency "vcr", "~> 6.0"

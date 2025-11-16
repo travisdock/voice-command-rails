@@ -1,0 +1,82 @@
+===============================================================================
+
+  Voice Command Rails has been installed! 🎤
+
+===============================================================================
+
+Next steps to complete setup:
+
+1. Set your GEMINI_API_KEY environment variable
+
+   Add to .env or set in your environment:
+
+     GEMINI_API_KEY=your_api_key_here
+
+   Get your API key from: https://aistudio.google.com/app/apikey
+
+2. Configure the gem (optional)
+
+   Review and customize the configuration in:
+
+     config/initializers/voice_command_rails.rb
+
+3. Add the voice command button to your layout
+
+   Add this to app/views/layouts/application.html.erb:
+
+     <%= render 'voice_command_rails/audio_button' if current_user&.voice_commands_enabled? %>
+
+   Or for all users:
+
+     <%= render 'voice_command_rails/audio_button' %>
+
+4. Add the response container to your layout
+
+   Add this where you want responses to appear:
+
+     <div id="voice_command_response"></div>
+     <div id="voice_command_status"></div>
+
+5. Create your first voice tool
+
+   Generate a tool with:
+
+     rails generate voice_command_rails:tool CreateTask
+
+   Then implement the tool in:
+
+     app/voice_tools/create_task_tool.rb
+
+6. Add the voice_commands_enabled? method to your User model (optional)
+
+   This controls which users can use voice commands:
+
+     class User < ApplicationRecord
+       def voice_commands_enabled?
+         # Your logic here, e.g.:
+         premium? || beta_tester?
+       end
+     end
+
+   Or generate a migration to add a boolean column:
+
+     rails generate voice_command_rails:migration
+
+7. Include the stylesheet (optional)
+
+   The gem includes default styles. To use them, add to app/assets/stylesheets/application.css:
+
+     *= require voice_command_rails/application
+
+   Or use your own custom styles by targeting the data attributes and CSS classes.
+
+8. Restart your Rails server
+
+===============================================================================
+
+Documentation: https://github.com/yourusername/voice_command_rails
+Report issues: https://github.com/yourusername/voice_command_rails/issues
+
+Happy voice commanding! 🚀
+
+===============================================================================
