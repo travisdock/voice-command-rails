@@ -1,0 +1,20 @@
+Description:
+    Installs VoiceCommand configuration files and Stimulus controller.
+    This generator creates:
+      - config/initializers/voice_command.rb (configuration with examples)
+      - app/javascript/controllers/voice_command_audio_recorder_controller.js (Stimulus controller)
+
+Example:
+    bin/rails generate voice_command:install
+
+    This will create:
+        config/initializers/voice_command.rb
+        app/javascript/controllers/voice_command_audio_recorder_controller.js
+
+After Installation:
+    1. Configure your LLM provider in the initializer
+    2. Add API keys to Rails credentials
+    3. Create your custom tools in app/tools/
+    4. Register tools in the initializer
+    5. Create a controller to handle voice command requests
+    6. Add the audio recorder to your views
